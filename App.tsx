@@ -9,14 +9,31 @@
  */
 
 import React from 'react';
-import {ApolloProvider, useQuery} from '@apollo/client';
-import {SafeAreaView, StatusBar, Text, View} from 'react-native';
+import {ApolloProvider, useQuery, useMutation} from '@apollo/client';
+import {Pressable, SafeAreaView, StatusBar, Text, FlatList} from 'react-native';
 import {ApolloClient, InMemoryCache, gql} from '@apollo/client';
+
+const SAY_HELLO = gql`
+  query Query {
+    hello
+  }
+`;
+
+function SayHello() {
+  const {loading, error, data} = useQuery(SAY_HELLO);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error :(</Text>;
+
+  console.log(data);
+  if (!data) return <Text>empty...</Text>;
+
+  return <Text>{data.hello}</Text>;
+}
 
 const App = () => {
   const client = new ApolloClient({
-    // uri: 'https://48p1r2roz4.sse.codesandbox.io',
-    uri: 'http://localhost:4000/',
+    uri: 'http://10.0.2.2:4000/graphql',
     cache: new InMemoryCache(),
   });
 
@@ -24,7 +41,7 @@ const App = () => {
     <ApolloProvider client={client}>
       <SafeAreaView>
         <StatusBar />
-        <Text>hi seonghee</Text>
+        <SayHello />
       </SafeAreaView>
     </ApolloProvider>
   );
