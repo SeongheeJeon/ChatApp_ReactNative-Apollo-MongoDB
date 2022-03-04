@@ -9,18 +9,28 @@
  */
 
 import React from 'react';
-import {ApolloProvider, useQuery, useMutation} from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  gql,
+  ApolloProvider,
+  useQuery,
+  useMutation,
+} from '@apollo/client';
 import {Pressable, SafeAreaView, StatusBar, Text, FlatList} from 'react-native';
-import {ApolloClient, InMemoryCache, gql} from '@apollo/client';
+import SignUp from './components/SignUp/SignUp';
 
-const SAY_HELLO = gql`
-  query Query {
-    hello
+const GET_USER = gql`
+  query User {
+    users {
+      name
+      description
+    }
   }
 `;
 
-function SayHello() {
-  const {loading, error, data} = useQuery(SAY_HELLO);
+function GetUser() {
+  const {loading, error, data} = useQuery(GET_USER);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :(</Text>;
@@ -28,7 +38,15 @@ function SayHello() {
   console.log(data);
   if (!data) return <Text>empty...</Text>;
 
-  return <Text>{data.hello}</Text>;
+  return (
+    <FlatList
+      data={data.users}
+      renderItem={({item}) => (
+        <Text>
+          name : {item.name} description : {item.description}
+        </Text>
+      )}></FlatList>
+  );
 }
 
 const App = () => {
@@ -41,7 +59,8 @@ const App = () => {
     <ApolloProvider client={client}>
       <SafeAreaView>
         <StatusBar />
-        <SayHello />
+        {/* <GetUser /> */}
+        <SignUp />
       </SafeAreaView>
     </ApolloProvider>
   );

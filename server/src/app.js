@@ -5,8 +5,8 @@ import {SubscriptionServer} from 'subscriptions-transport-ws';
 import {execute, subscribe} from 'graphql';
 import morgan from 'morgan';
 
-const Schema = require('./schema/schema');
-const Resolvers = require('./resolver');
+const Schema = require('./schema/users');
+const Resolvers = require('./resolvers/index');
 const Connectors = require('./connector');
 
 const path = '/graphql';
@@ -20,7 +20,6 @@ const startApolloServer = async schema => {
   const apollo = new ApolloServer({
     typeDefs: schema,
     resolvers: Resolvers,
-    context: Connectors,
     plugins: [
       {
         async serverWillStart() {
