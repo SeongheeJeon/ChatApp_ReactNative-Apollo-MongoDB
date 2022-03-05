@@ -18,7 +18,8 @@ import {
   useMutation,
 } from '@apollo/client';
 import {Pressable, SafeAreaView, StatusBar, Text, FlatList} from 'react-native';
-import SignUp from './components/SignUp/SignUp';
+import SignUp from './components/SignUp';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const GET_USER = gql`
   query User {
@@ -57,11 +58,11 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <SafeAreaView>
-        <StatusBar />
-        {/* <GetUser /> */}
+      <SafeAreaProvider>
         <SignUp />
-      </SafeAreaView>
+        {/* <GetUser /> */}
+        <StatusBar />
+      </SafeAreaProvider>
     </ApolloProvider>
   );
 };

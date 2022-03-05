@@ -11,14 +11,14 @@ module.exports = gql`
   }
 
   input RegisterInput {
-    username: String
-    email: String
-    password: String
+    username: String!
+    email: String!
+    password: String!
   }
 
   input LoginInput {
-    email: String
-    password: String
+    email: String!
+    password: String!
   }
 
   type Query {

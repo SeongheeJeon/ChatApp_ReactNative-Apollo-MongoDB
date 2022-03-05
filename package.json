@@ -18,7 +18,8 @@
     "mongoose": "^6.2.4",
     "morgan": "^1.10.0",
     "react": "17.0.2",
-    "react-native": "0.67.3"
+    "react-native": "0.67.3",
+    "react-native-safe-area-context": "^4.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
