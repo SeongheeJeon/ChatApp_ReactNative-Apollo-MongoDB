@@ -1,5 +1,4 @@
-import usersResolvers from './users';
-import resolver from './resolver';
+import usersResolvers from './userResolvers';
 
 const resolvers = {
   Query: {
@@ -8,7 +7,6 @@ const resolvers = {
   Mutation: {
     ...usersResolvers.Mutation,
   },
-  RootQuery: resolver.RootQuery,
 };
 
 module.exports = resolvers;

@@ -1,4 +1,4 @@
-const UserModel = require('./models/User.js');
+const UserModel = require('./models/UserModel.js');
 class User {
   constructor() {
     this.findUser = title => {

@@ -1,9 +1,16 @@
 import {ApolloError} from 'apollo-server-errors';
-import User from '../models/User';
+import User from '../models/UserModel';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const resolveFunctions = {
+  Query: {
+    async users() {
+      const users = await User.find();
+      return users;
+    },
+    user: (_, {ID}) => User.findById(ID),
+  },
   Mutation: {
     async registerUser(_, {registerInput: {username, email, password}}) {
       // Check if email exists
@@ -74,9 +81,6 @@ const resolveFunctions = {
         throw new ApolloError('Incorrect password', 'INCORRECT_PASSWORD');
       }
     },
-  },
-  Query: {
-    user: (_, {ID}) => User.findById(ID),
   },
 };
 

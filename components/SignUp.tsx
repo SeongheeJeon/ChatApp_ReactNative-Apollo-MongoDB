@@ -9,17 +9,11 @@ import {
   Alert,
 } from 'react-native';
 import React, {useState} from 'react';
-import {gql, useMutation} from '@apollo/client';
+import {gql, useMutation, useQuery} from '@apollo/client';
 
 const CREATE_ACCOUNT_MUTATION = gql`
-  mutation registerUser(
-    $username: String!
-    $email: String!
-    $password: String!
-  ) {
-    registerUser(
-      registerInput: {username: $username, email: $email, password: $password}
-    ) {
+  mutation registerUser($registerInput: RegisterInput) {
+    registerUser(registerInput: $registerInput) {
       name
     }
   }
@@ -40,12 +34,13 @@ const SignUp = () => {
       Alert.alert('Please check the password!');
       return;
     }
-
     await signUpMutation({
       variables: {
-        username,
-        email,
-        password,
+        registerInput: {
+          username,
+          email,
+          password,
+        },
       },
     });
     if (loading) console.log('Submitting ... ');

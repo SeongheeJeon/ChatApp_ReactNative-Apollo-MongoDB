@@ -5,7 +5,7 @@ import {SubscriptionServer} from 'subscriptions-transport-ws';
 import {execute, subscribe} from 'graphql';
 import morgan from 'morgan';
 
-const Schema = require('./schema/users');
+const Schema = require('./schema/userSchema');
 const Resolvers = require('./resolvers/index');
 const Connectors = require('./connector');
 

@@ -1,6 +1,16 @@
 import {gql} from 'apollo-server-express';
 
 module.exports = gql`
+  type Query {
+    users: [User]
+    user(id: ID!): User
+  }
+
+  type Mutation {
+    registerUser(registerInput: RegisterInput): User
+    loginUser(loginInput: LoginInput): User
+  }
+
   type User {
     name: String
     description: String
@@ -19,22 +29,5 @@ module.exports = gql`
   input LoginInput {
     email: String!
     password: String!
-  }
-
-  type Query {
-    user(id: ID!): User
-  }
-
-  type Mutation {
-    registerUser(registerInput: RegisterInput): User
-    loginUser(loginInput: LoginInput): User
-  }
-
-  type RootQuery {
-    users: [User]
-  }
-
-  schema {
-    query: RootQuery
   }
 `;
