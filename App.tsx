@@ -20,6 +20,7 @@ import {
 import {Pressable, SafeAreaView, StatusBar, Text, FlatList} from 'react-native';
 import SignUp from './components/SignUp';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Navigation from './navigation';
 
 const GET_USER = gql`
   query User {
@@ -59,7 +60,9 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <SafeAreaProvider>
-        <SignUp />
+        <Navigation />
+
+        {/* <SignUp /> */}
         {/* <GetUser /> */}
         <StatusBar />
       </SafeAreaProvider>
