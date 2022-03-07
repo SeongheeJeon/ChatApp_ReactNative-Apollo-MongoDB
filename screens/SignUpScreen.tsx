@@ -19,7 +19,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
   }
 `;
 
-const SignUp = () => {
+const SignUpScreen = () => {
   const [username, setUsername] = useState<String | undefined>();
   const [email, setEmail] = useState<String | undefined>();
   const [password, setPassword] = useState<String | undefined>();
@@ -87,7 +87,7 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
   container: {

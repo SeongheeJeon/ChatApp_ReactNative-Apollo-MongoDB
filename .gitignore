@@ -63,3 +63,4 @@ buck-out/
 
 .env
 screenIMG
+dummydata.js

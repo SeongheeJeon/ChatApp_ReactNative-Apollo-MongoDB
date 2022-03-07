@@ -8,48 +8,13 @@
  * @format
  */
 
+import {StatusBar} from 'react-native';
+
 import React from 'react';
-import {
-  ApolloClient,
-  InMemoryCache,
-  gql,
-  ApolloProvider,
-  useQuery,
-  useMutation,
-} from '@apollo/client';
-import {Pressable, SafeAreaView, StatusBar, Text, FlatList} from 'react-native';
-import SignUp from './components/SignUp';
+import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Navigation from './navigation';
-
-const GET_USER = gql`
-  query User {
-    users {
-      name
-      description
-    }
-  }
-`;
-
-function GetUser() {
-  const {loading, error, data} = useQuery(GET_USER);
-
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>Error :(</Text>;
-
-  console.log(data);
-  if (!data) return <Text>empty...</Text>;
-
-  return (
-    <FlatList
-      data={data.users}
-      renderItem={({item}) => (
-        <Text>
-          name : {item.name} description : {item.description}
-        </Text>
-      )}></FlatList>
-  );
-}
 
 const App = () => {
   const client = new ApolloClient({
@@ -61,9 +26,6 @@ const App = () => {
     <ApolloProvider client={client}>
       <SafeAreaProvider>
         <Navigation />
-
-        {/* <SignUp /> */}
-        {/* <GetUser /> */}
         <StatusBar />
       </SafeAreaProvider>
     </ApolloProvider>

@@ -6,16 +6,32 @@ import {RootStackParamList} from '../types';
 import HomeScreen from '../screens/HomeScreen';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import UsersScreen from '../screens/UsersScreen';
-import SettingScreen from '../screens/Settings';
+import SettingScreen from '../screens/SettingsScreen';
 import GroupInfoScreen from '../screens/GroupInfoScreen';
 import HomeHeader from './HomeHeader';
 import ChatRoomHeader from './ChatRoomHeader';
+import SignUpScreen from '../screens/SignUpScreen';
+import SignInScreen from '../screens/SignInScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="Home"
         component={HomeScreen}

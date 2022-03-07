@@ -37,7 +37,7 @@ const resolveFunctions = {
           user_id: newUser._id,
           email,
         },
-        'UNSAFE_STRING',
+        process.env.JWT_SECRET,
         {
           expiresIn: '2h',
         },
@@ -70,12 +70,15 @@ const resolveFunctions = {
             expiresIn: '2h',
           },
         );
-        // Attatch token to user model that we found above
+
         user.token = token;
 
+        // Save user in MongoDB
+        const res = await user.save();
+
         return {
-          id: user.id,
-          ...user._doc,
+          id: res.id,
+          ...res._doc,
         };
       } else {
         throw new ApolloError('Incorrect password', 'INCORRECT_PASSWORD');

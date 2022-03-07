@@ -8,6 +8,8 @@ declare global {
 
 export type RootStackParamList = {
   Root: undefined;
+  SignUp: undefined;
+  SignIn: undefined;
   Home: undefined;
   ChatRoom: undefined;
   Modal: undefined;
