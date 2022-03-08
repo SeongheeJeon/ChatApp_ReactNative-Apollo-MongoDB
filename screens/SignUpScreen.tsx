@@ -1,15 +1,14 @@
 import {
-  View,
   Text,
   TextInput,
   StyleSheet,
-  Button,
   SafeAreaView,
   TouchableOpacity,
   Alert,
 } from 'react-native';
 import React, {useState} from 'react';
-import {gql, useMutation, useQuery} from '@apollo/client';
+import {gql, useMutation} from '@apollo/client';
+import {useNavigation} from '@react-navigation/core';
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation registerUser($registerInput: RegisterInput) {
@@ -24,6 +23,8 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState<String | undefined>();
   const [password, setPassword] = useState<String | undefined>();
   const [secondPassword, setSecondPassword] = useState<String | undefined>();
+
+  const navigation = useNavigation();
 
   const [signUpMutation, {data, loading, error}] = useMutation(
     CREATE_ACCOUNT_MUTATION,
@@ -47,29 +48,33 @@ const SignUpScreen = () => {
     if (error) console.log(`Submission error! ${error}`);
   };
 
+  const goToSignIn = () => {
+    navigation.navigate('SignIn');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Create a new account</Text>
-      <Text>Username *</Text>
+      <Text style={styles.subtitle}>Username *</Text>
       <TextInput
         style={styles.input}
         autoCapitalize="none"
         onChangeText={setUsername}
       />
-      <Text>Email *</Text>
+      <Text style={styles.subtitle}>Email *</Text>
       <TextInput
         style={styles.input}
         autoCapitalize="none"
         onChangeText={setEmail}
       />
-      <Text>Password *</Text>
+      <Text style={styles.subtitle}>Password *</Text>
       <TextInput
         style={styles.input}
         secureTextEntry={true}
         autoCapitalize="none"
         onChangeText={setPassword}
       />
-      <Text>Confirm Password *</Text>
+      <Text style={styles.subtitle}>Confirm Password *</Text>
       <TextInput
         style={styles.input}
         secureTextEntry={true}
@@ -83,6 +88,13 @@ const SignUpScreen = () => {
         onPress={onPressSignUp}>
         <Text style={styles.buttonText}>SIGN UP</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={[styles.button, {backgroundColor: 'white', marginTop: 'auto'}]}
+        onPress={goToSignIn}>
+        <Text style={[styles.buttonText, {color: 'orange'}]}>Sign In Here</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -93,11 +105,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: 'white',
   },
   title: {
     marginTop: 20,
     marginBottom: 20,
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+  subtitle: {
     fontWeight: 'bold',
   },
   input: {
@@ -112,15 +128,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
   },
+
   button: {
     width: '100%',
     height: 45,
     backgroundColor: 'orange',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 'auto',
+    marginTop: 20,
   },
-
   buttonText: {
     color: 'white',
     fontWeight: 'bold',

@@ -3,35 +3,19 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {RootStackParamList} from '../types';
 
-import HomeScreen from '../screens/HomeScreen';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
-import UsersScreen from '../screens/UsersScreen';
-import SettingScreen from '../screens/SettingsScreen';
 import GroupInfoScreen from '../screens/GroupInfoScreen';
+import HomeScreen from '../screens/HomeScreen';
+import UsersScreen from '../screens/UsersScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 import HomeHeader from './HomeHeader';
 import ChatRoomHeader from './ChatRoomHeader';
-import SignUpScreen from '../screens/SignUpScreen';
-import SignInScreen from '../screens/SignInScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const RootNavigator = () => {
+const SignInNav = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="SignIn"
-        component={SignInScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -54,9 +38,9 @@ const RootNavigator = () => {
         }}
         component={UsersScreen}
       />
-      <Stack.Screen name="Settings" component={SettingScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
   );
 };
 
-export default RootNavigator;
+export default SignInNav;

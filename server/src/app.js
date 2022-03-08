@@ -1,18 +1,26 @@
 import express from 'express';
 import {createServer} from 'http';
 import {ApolloServer} from 'apollo-server-express';
-import {SubscriptionServer} from 'subscriptions-transport-ws';
-import {execute, subscribe} from 'graphql';
 import morgan from 'morgan';
+import jwt from 'jsonwebtoken';
 
 const Schema = require('./schema/userSchema');
 const Resolvers = require('./resolvers/index');
-const Connectors = require('./connector');
 
 const path = '/graphql';
 
 const app = express();
 const httpServer = createServer(app);
+
+const getPayload = token => {
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    return {loggedIn: true, payload};
+  } catch (err) {
+    console.log('paylod ERROR :  ', err);
+    return {loggedIn: false};
+  }
+};
 
 const startApolloServer = async schema => {
   app.use(morgan('dev'));
@@ -20,37 +28,19 @@ const startApolloServer = async schema => {
   const apollo = new ApolloServer({
     typeDefs: schema,
     resolvers: Resolvers,
-    plugins: [
-      {
-        async serverWillStart() {
-          return {
-            async drainServer() {
-              subscriptionServer.close();
-            },
-          };
-        },
-      },
-    ],
+    context: ({req}) => {
+      const token = req.headers.authorization;
+
+      if (token && token !== 'undefined') {
+        const {payload: user, loggedIn} = getPayload(token);
+        return {user, loggedIn};
+      } else {
+        console.log('NO TOKEN');
+        return;
+      }
+    },
   });
 
-  const subscriptionServer = SubscriptionServer.create(
-    {
-      schema,
-      execute,
-      subscribe,
-      onConnect: async ({token}) => {
-        console.log('소켓 연결!');
-        if (!token) {
-          console.log('토큰을 읽을 수 없습니다.');
-          throw new Error('토큰을 읽을 수 없습니다.');
-        }
-      },
-    },
-    {
-      server: httpServer,
-      path: apollo.graphqlPath,
-    },
-  );
   await apollo.start();
 
   apollo.applyMiddleware({app, path});

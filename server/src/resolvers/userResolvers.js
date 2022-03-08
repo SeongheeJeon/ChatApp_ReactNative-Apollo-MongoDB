@@ -9,7 +9,23 @@ const resolveFunctions = {
       const users = await User.find();
       return users;
     },
+
     user: (_, {ID}) => User.findById(ID),
+
+    async getAuthUser(parent, args, context) {
+      if (context.loggedIn) {
+        const authUser = await User.findById(context.user.user_id);
+        if (!authUser) {
+          throw new ApolloError("Can't find User with userID.");
+        }
+        return {
+          id: authUser.id,
+          ...authUser._doc,
+        };
+      } else {
+        return null;
+      }
+    },
   },
   Mutation: {
     async registerUser(_, {registerInput: {username, email, password}}) {
@@ -53,9 +69,13 @@ const resolveFunctions = {
         ...res._doc,
       };
     },
-    async loginUser(_, {loginInput: {email, password}}) {
+    async loginUser(_, {loginInput: {email, password}}, context) {
       // Check if user exist with the email
       const user = await User.findOne({email});
+
+      if (!user) {
+        throw new ApolloError('This email does not exist.', 'INVALID EMAIL');
+      }
 
       // Check if password equals
       if (user && (await bcrypt.compare(password, user.password))) {
@@ -65,7 +85,7 @@ const resolveFunctions = {
             user_id: user._id,
             email,
           },
-          'UNSAFE_STRING',
+          process.env.JWT_SECRET,
           {
             expiresIn: '2h',
           },

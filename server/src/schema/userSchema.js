@@ -4,6 +4,7 @@ module.exports = gql`
   type Query {
     users: [User]
     user(id: ID!): User
+    getAuthUser: User
   }
 
   type Mutation {
@@ -12,6 +13,7 @@ module.exports = gql`
   }
 
   type User {
+    id: ID!
     name: String
     description: String
     username: String
