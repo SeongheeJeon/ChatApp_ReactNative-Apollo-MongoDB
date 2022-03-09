@@ -3,12 +3,14 @@ import React from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {isSignInVar} from '../navigation/index';
-
-const SettingsScreen = () => {
+const SettingsScreen = ({navigation}) => {
   const signOut = async () => {
     AsyncStorage.removeItem('token');
-    isSignInVar(false);
+
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'SignIn'}],
+    });
   };
 
   return (

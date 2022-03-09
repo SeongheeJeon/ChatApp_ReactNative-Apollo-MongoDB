@@ -10,8 +10,6 @@ import {
 import React, {useState} from 'react';
 import {gql, useMutation, useQuery} from '@apollo/client';
 import asyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/core';
-import {isSignInVar} from '../navigation/index';
 
 const SIGNIN_MUTATION = gql`
   mutation loginUser($loginInput: LoginInput) {
@@ -22,12 +20,10 @@ const SIGNIN_MUTATION = gql`
   }
 `;
 
-const SignInScreen = () => {
+const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState<String | undefined>();
   const [password, setPassword] = useState<String | undefined>();
   const [signInMutation, {data, loading, error}] = useMutation(SIGNIN_MUTATION);
-
-  const navigation = useNavigation();
 
   const onPressSignIn = async () => {
     if (!email) {
@@ -50,7 +46,10 @@ const SignInScreen = () => {
       onCompleted: async data => {
         asyncStorage.setItem('token', data.loginUser.token);
 
-        isSignInVar(true);
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
       },
       onError: data => {
         Alert.alert(data.message);

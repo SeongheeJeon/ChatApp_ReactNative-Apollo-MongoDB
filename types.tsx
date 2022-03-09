@@ -8,8 +8,7 @@ declare global {
 
 export type RootStackParamList = {
   Root: undefined;
-  AuthedScreen: undefined;
-  UnAuthedScreen: undefined;
+  Welcome: undefined;
   SignUp: undefined;
   SignIn: undefined;
   Home: undefined;

@@ -1,11 +1,17 @@
 import React, {useEffect} from 'react';
-import {gql, useQuery, useReactiveVar} from '@apollo/client';
+import {gql, useQuery} from '@apollo/client';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import SignInNav from './SignInNav';
-import SignOutNav from './SignOutNav';
 import {RootStackParamList} from '../types';
-import {isSignInVar} from './index';
+import ChatRoomScreen from '../screens/ChatRoomScreen';
+import GroupInfoScreen from '../screens/GroupInfoScreen';
+import HomeScreen from '../screens/HomeScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import SignInScreen from '../screens/SignInScreen';
+import SignUpScreen from '../screens/SignUpScreen';
+import UsersScreen from '../screens/UsersScreen';
+import ChatRoomHeader from './ChatRoomHeader';
+import HomeHeader from './HomeHeader';
 
 const GETAUTHUSER_QUERY = gql`
   query getAuthUser {
@@ -19,7 +25,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNav = () => {
   const {loading, error, data} = useQuery(GETAUTHUSER_QUERY);
-  const isSignIn = useReactiveVar(isSignInVar);
 
   // check if user authenticated (have valid token)
   useEffect(() => {
@@ -28,7 +33,6 @@ const RootNav = () => {
     if (data) {
       if (data.getAuthUser) {
         console.log('RootNav getAuthUser data : ', data);
-        isSignInVar(true);
       } else {
         console.log('RootNav NO TOKEN');
       }
@@ -36,20 +40,55 @@ const RootNav = () => {
   }, [loading, error, data]);
 
   return (
-    <Stack.Navigator>
-      {isSignIn ? (
-        <Stack.Screen
-          name="AuthedScreen"
-          component={SignInNav}
-          options={{headerShown: false}}
-        />
-      ) : (
-        <Stack.Screen
-          name="UnAuthedScreen"
-          component={SignOutNav}
-          options={{headerShown: false}}
-        />
-      )}
+    <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Screen
+        name="Welcome"
+        component={data && data.getAuthUser ? HomeScreen : SignInScreen}
+        options={() =>
+          data && data.getAuthUser
+            ? {
+                headerTitle: () => <HomeHeader />,
+              }
+            : {headerShown: false}
+        }
+      />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerTitle: () => <HomeHeader />,
+        }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ChatRoom"
+        component={ChatRoomScreen}
+        options={() => ({
+          headerTitle: () => <ChatRoomHeader />,
+        })}
+      />
+      <Stack.Screen name="GroupInfoScreen" component={GroupInfoScreen} />
+      <Stack.Screen
+        name="UsersScreen"
+        options={{
+          title: 'Users',
+        }}
+        component={UsersScreen}
+      />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
   );
 };
