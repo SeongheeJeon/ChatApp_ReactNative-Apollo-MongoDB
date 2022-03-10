@@ -15,10 +15,16 @@ export type RootStackParamList = {
   ChatRoom: undefined;
   Modal: undefined;
   NotFound: undefined;
-  UsersScreen: undefined;
+  UsersScreen: {authUser: AuthUser};
   GroupInfoScreen: undefined;
   Settings: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  imageUri: string;
+}

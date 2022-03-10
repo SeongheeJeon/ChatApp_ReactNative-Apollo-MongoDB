@@ -63,7 +63,6 @@ const SignInScreen = ({navigation}) => {
     console.log('clicked Forgot Password button');
   };
   const goToSignUp = () => {
-    console.log('clicked Sign Up button');
     navigation.navigate('SignUp');
   };
 

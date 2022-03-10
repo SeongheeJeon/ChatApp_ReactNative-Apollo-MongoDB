@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {gql, useQuery} from '@apollo/client';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {RootStackParamList} from '../types';
+import {AuthUser, RootStackParamList} from '../types';
+
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import GroupInfoScreen from '../screens/GroupInfoScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -11,20 +12,22 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import UsersScreen from '../screens/UsersScreen';
 import ChatRoomHeader from './ChatRoomHeader';
-import HomeHeader from './HomeHeader';
 
 const GETAUTHUSER_QUERY = gql`
   query getAuthUser {
     getAuthUser {
       id
       email
+      imageUri
     }
   }
 `;
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNav = () => {
   const {loading, error, data} = useQuery(GETAUTHUSER_QUERY);
+  const [authUser, setAuthUser] = useState<AuthUser | undefined>();
 
   // check if user authenticated (have valid token)
   useEffect(() => {
@@ -32,9 +35,10 @@ const RootNav = () => {
     if (error) console.log(`rootnavigator query error! ${error}`);
     if (data) {
       if (data.getAuthUser) {
-        console.log('RootNav getAuthUser data : ', data);
+        console.log('RootNav getAuthUser complete');
+        setAuthUser(data.getAuthUser);
       } else {
-        console.log('RootNav NO TOKEN');
+        console.log('RootNav getAUthUser : NO TOKEN');
       }
     }
   }, [loading, error, data]);
@@ -43,22 +47,11 @@ const RootNav = () => {
     <Stack.Navigator initialRouteName="Welcome">
       <Stack.Screen
         name="Welcome"
-        component={data && data.getAuthUser ? HomeScreen : SignInScreen}
-        options={() =>
-          data && data.getAuthUser
-            ? {
-                headerTitle: () => <HomeHeader />,
-              }
-            : {headerShown: false}
+        component={
+          authUser ? () => <HomeScreen authUser={authUser} /> : SignInScreen
         }
       />
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          headerTitle: () => <HomeHeader />,
-        }}
-      />
+      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}

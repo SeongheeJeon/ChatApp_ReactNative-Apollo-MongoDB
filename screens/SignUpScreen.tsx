@@ -10,10 +10,10 @@ import React, {useState} from 'react';
 import {gql, useMutation} from '@apollo/client';
 import {useNavigation} from '@react-navigation/core';
 
-const CREATE_ACCOUNT_MUTATION = gql`
+const SIGNUP_MUTATION = gql`
   mutation registerUser($registerInput: RegisterInput) {
     registerUser(registerInput: $registerInput) {
-      name
+      username
     }
   }
 `;
@@ -26,15 +26,19 @@ const SignUpScreen = () => {
 
   const navigation = useNavigation();
 
-  const [signUpMutation, {data, loading, error}] = useMutation(
-    CREATE_ACCOUNT_MUTATION,
-  );
+  const [signUpMutation, {data, loading, error}] = useMutation(SIGNUP_MUTATION);
 
   const onPressSignUp = async () => {
+    if (!email || !username || !password || !secondPassword) {
+      Alert.alert('Input All');
+      return;
+    }
+
     if (password !== secondPassword) {
       Alert.alert('Please check the password!');
       return;
     }
+
     await signUpMutation({
       variables: {
         registerInput: {
@@ -42,6 +46,17 @@ const SignUpScreen = () => {
           email,
           password,
         },
+      },
+      onCompleted: data => {
+        Alert.alert('회원가입 완료. 로그인화면으로 이동.');
+
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'SignIn'}],
+        });
+      },
+      onError: data => {
+        Alert.alert(data.message);
       },
     });
     if (loading) console.log('Submitting ... ');

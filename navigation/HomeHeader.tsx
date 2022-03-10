@@ -1,9 +1,14 @@
-import {View, Text, Pressable} from 'react-native';
+import {View, Text, Pressable, Image} from 'react-native';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/core';
+import {AuthUser} from '../types';
 
-const HomeHeader = () => {
+type Props = {
+  authUser: AuthUser;
+};
+
+const HomeHeader: React.FC<Props> = ({authUser}) => {
   const navigation = useNavigation();
 
   return (
@@ -13,6 +18,13 @@ const HomeHeader = () => {
         marginRight: 30,
         alignItems: 'center',
       }}>
+      <Image
+        source={{
+          uri: authUser.imageUri,
+        }}
+        style={{width: 30, height: 30, borderRadius: 30}}
+      />
+
       <Text
         style={{
           flex: 1,
@@ -33,7 +45,10 @@ const HomeHeader = () => {
         />
       </Pressable>
 
-      <Pressable onPress={() => navigation.navigate('UsersScreen')}>
+      <Pressable
+        onPress={() =>
+          navigation.navigate('UsersScreen', {authUser: authUser})
+        }>
         <Feather
           name="edit-2"
           size={24}

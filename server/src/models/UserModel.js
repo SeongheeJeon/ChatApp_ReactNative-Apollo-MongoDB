@@ -5,6 +5,7 @@ const userSchema = Schema({
   email: {type: String, unique: true},
   password: {type: String},
   token: {type: String},
+  imageUri: {type: String},
 });
 
 const User = model('User', userSchema);

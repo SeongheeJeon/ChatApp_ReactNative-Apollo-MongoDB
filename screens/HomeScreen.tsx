@@ -1,8 +1,25 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import ChatRoomItem from '../components/ChatRoomItem';
+import {useNavigation} from '@react-navigation/native';
 
-const HomeScreen = () => {
+import ChatRoomItem from '../components/ChatRoomItem';
+import HomeHeader from '../navigation/HomeHeader';
+import {AuthUser} from '../types';
+
+export type Props = {
+  authUser: AuthUser;
+};
+
+const HomeScreen: React.FC<Props> = ({authUser}) => {
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    authUser &&
+      navigation.setOptions({
+        headerTitle: () => <HomeHeader authUser={authUser} />,
+      });
+  }, [authUser]);
+
   return (
     <View style={styles.page}>
       <ChatRoomItem />
