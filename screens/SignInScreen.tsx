@@ -8,19 +8,25 @@ import {
   Alert,
 } from 'react-native';
 import React, {useState} from 'react';
-import {gql, useMutation, useQuery} from '@apollo/client';
+import {gql, useMutation} from '@apollo/client';
 import asyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackScreenProps} from '../types';
 
 const SIGNIN_MUTATION = gql`
   mutation loginUser($loginInput: LoginInput) {
     loginUser(loginInput: $loginInput) {
+      id
+      email
       username
+      imageUri
       token
     }
   }
 `;
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen: React.FC<RootStackScreenProps<'UsersScreen'>> = ({
+  navigation,
+}) => {
   const [email, setEmail] = useState<String | undefined>();
   const [password, setPassword] = useState<String | undefined>();
   const [signInMutation, {data, loading, error}] = useMutation(SIGNIN_MUTATION);
@@ -45,10 +51,11 @@ const SignInScreen = ({navigation}) => {
       },
       onCompleted: async data => {
         asyncStorage.setItem('token', data.loginUser.token);
+        console.log('SignInScreen signInMutation completed');
 
         navigation.reset({
           index: 0,
-          routes: [{name: 'Home'}],
+          routes: [{name: 'Home', params: data.loginUser}],
         });
       },
       onError: data => {

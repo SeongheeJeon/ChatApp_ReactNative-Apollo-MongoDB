@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ChatRoomItem from '../components/ChatRoomItem';
-import HomeHeader from '../navigation/HomeHeader';
+import HomeHeader from '../components/HomeHeader';
 import {AuthUser} from '../types';
 
 export type Props = {
@@ -12,13 +12,14 @@ export type Props = {
 
 const HomeScreen: React.FC<Props> = ({authUser}) => {
   const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
-    authUser &&
-      navigation.setOptions({
-        headerTitle: () => <HomeHeader authUser={authUser} />,
-      });
-  }, [authUser]);
+    navigation.setOptions({
+      headerShown: true,
+      headerTitle: () => <HomeHeader authUser={authUser || route.params} />,
+    });
+  }, []);
 
   return (
     <View style={styles.page}>

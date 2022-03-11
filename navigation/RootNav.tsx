@@ -11,12 +11,13 @@ import SettingsScreen from '../screens/SettingsScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import UsersScreen from '../screens/UsersScreen';
-import ChatRoomHeader from './ChatRoomHeader';
+import ChatRoomHeader from '../components/ChatRoomHeader';
 
 const GETAUTHUSER_QUERY = gql`
   query getAuthUser {
     getAuthUser {
       id
+      username
       email
       imageUri
     }
@@ -38,7 +39,7 @@ const RootNav = () => {
         console.log('RootNav getAuthUser complete');
         setAuthUser(data.getAuthUser);
       } else {
-        console.log('RootNav getAUthUser : NO TOKEN');
+        console.log('RootNav getAuthUser : NO TOKEN');
       }
     }
   }, [loading, error, data]);
@@ -50,6 +51,9 @@ const RootNav = () => {
         component={
           authUser ? () => <HomeScreen authUser={authUser} /> : SignInScreen
         }
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen

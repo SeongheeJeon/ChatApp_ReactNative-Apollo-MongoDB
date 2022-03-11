@@ -25,6 +25,8 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export interface AuthUser {
   id: string;
+  username: string;
   email: string;
   imageUri: string;
+  token: string;
 }
