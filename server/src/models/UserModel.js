@@ -6,6 +6,12 @@ const userSchema = Schema({
   password: {type: String},
   token: {type: String},
   imageUri: {type: String},
+  chatrooms: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Chatroom',
+    },
+  ],
 });
 
 const User = model('User', userSchema);

@@ -1,6 +1,6 @@
 import {gql} from 'apollo-server-express';
 
-module.exports = gql`
+export default gql`
   type Query {
     users: [User]
     user(id: ID!): User
@@ -14,11 +14,11 @@ module.exports = gql`
 
   type User {
     id: ID!
-    username: String
-    email: String
-    password: String
+    username: String!
+    email: String!
     imageUri: String
     token: String
+    chatrooms: [Chatroom]
   }
 
   input RegisterInput {

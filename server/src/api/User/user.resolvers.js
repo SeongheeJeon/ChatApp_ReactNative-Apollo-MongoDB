@@ -1,9 +1,9 @@
 import {ApolloError} from 'apollo-server-errors';
-import User from '../models/UserModel';
+import User from '../../models/UserModel';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const resolveFunctions = {
+export default {
   Query: {
     async users() {
       const users = await User.find();
@@ -106,5 +106,3 @@ const resolveFunctions = {
     },
   },
 };
-
-module.exports = resolveFunctions;

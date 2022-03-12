@@ -4,8 +4,7 @@ import {ApolloServer} from 'apollo-server-express';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 
-const Schema = require('./schema/userSchema');
-const Resolvers = require('./resolvers/index');
+import schema from './api/index';
 
 const path = '/graphql';
 
@@ -26,8 +25,7 @@ const startApolloServer = async schema => {
   app.use(morgan('dev'));
 
   const apollo = new ApolloServer({
-    typeDefs: schema,
-    resolvers: Resolvers,
+    schema,
     context: ({req}) => {
       const token = req.headers.authorization;
 
@@ -46,6 +44,6 @@ const startApolloServer = async schema => {
   apollo.applyMiddleware({app, path});
 };
 
-startApolloServer(Schema);
+startApolloServer(schema);
 
 export default httpServer;
