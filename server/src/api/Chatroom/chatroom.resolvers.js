@@ -7,16 +7,37 @@ export default {
       const chatrooms = await Chatroom.find();
       return chatrooms;
     },
+    async myChatrooms(_, __, {user}) {
+      const authUser = await User.findById(user.user_id).exec();
+      const chatrooms = await Promise.all(
+        authUser.chatrooms.map(async chatroomId => {
+          const chatroom = await Chatroom.findById(chatroomId).exec();
+          return chatroom;
+        }),
+      );
+      return chatrooms;
+    },
+    async chatroomUsers(_, {chatroomId}) {
+      const chatroom = await Chatroom.findById(chatroomId);
+      const users = await Promise.all(
+        chatroom.users.map(async id => await User.findById(id).exec()),
+      );
+      return users;
+    },
   },
   Mutation: {
     async createChatroom(_, {usersId}) {
-      const users = await Promise.all(
-        usersId.map(async id => await User.findById(id).exec()),
-      );
+      const newChatroom = await new Chatroom();
 
-      const newChatroom = await new Chatroom({
-        users: users,
-      });
+      const users = await Promise.all(
+        usersId.map(async id => {
+          const user = await User.findById(id).exec();
+          await user.chatrooms.push(newChatroom);
+          await user.save();
+          return user;
+        }),
+      );
+      newChatroom.users = users;
 
       const res = await newChatroom.save();
 

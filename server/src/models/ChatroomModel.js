@@ -3,7 +3,7 @@ const {model, Schema} = require('mongoose');
 const chatroomSchema = Schema({
   name: {type: String},
   imageUri: {type: String},
-  newMessage: {type: Number},
+  newMessages: {type: Number},
   users: [
     {
       type: Schema.Types.ObjectId,

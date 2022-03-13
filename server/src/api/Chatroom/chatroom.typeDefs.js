@@ -5,7 +5,7 @@ export default gql`
     id: ID!
     name: String
     imageUri: String
-    newMessage: Int
+    newMessages: Int
     users: [User]
     messages: [Message]
     lastMessage: Message
@@ -15,6 +15,8 @@ export default gql`
 
   type Query {
     chatrooms: [Chatroom]
+    myChatrooms: [Chatroom]
+    chatroomUsers(chatroomId: String): [User]
   }
 
   type Mutation {

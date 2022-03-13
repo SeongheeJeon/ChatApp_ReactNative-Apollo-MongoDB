@@ -37,3 +37,17 @@ export interface User {
   email: string;
   imageUri: string;
 }
+
+export interface Chatroom {
+  id: string;
+  name: string;
+  imageUri: string;
+  newMessages: Number;
+  users: [User];
+  messages: [Message];
+  lastMessage: Message;
+  createdAt: String;
+  updatedAt: String;
+}
+
+export interface Message {}
