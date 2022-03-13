@@ -30,3 +30,10 @@ export interface AuthUser {
   imageUri: string;
   token: string;
 }
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  imageUri: string;
+}

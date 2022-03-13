@@ -6,7 +6,7 @@ import ChatRoomItem from '../components/ChatRoomItem';
 import HomeHeader from '../components/HomeHeader';
 import {AuthUser} from '../types';
 
-export type Props = {
+type Props = {
   authUser: AuthUser;
 };
 

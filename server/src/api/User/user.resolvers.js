@@ -10,11 +10,13 @@ export default {
       return users;
     },
 
-    user: (_, {ID}) => User.findById(ID),
+    user(_, {id}) {
+      return User.findById(id).exec();
+    },
 
     async getAuthUser(parent, args, context) {
       if (context.loggedIn) {
-        const authUser = await User.findById(context.user.user_id);
+        const authUser = await User.findById(context.user.user_id).exec();
         if (!authUser) {
           throw new ApolloError("Can't find User with userID.");
         }

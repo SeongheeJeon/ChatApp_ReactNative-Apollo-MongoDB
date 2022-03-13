@@ -42,7 +42,7 @@ const UsersScreen: React.FC<RootStackScreenProps<'UsersScreen'>> = ({
     <SafeAreaView style={styles.page}>
       <FlatList
         data={otherUsers}
-        renderItem={({item}) => <UserItem authUser={item} />}
+        renderItem={({item}) => <UserItem authUser={authUser} user={item} />}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
