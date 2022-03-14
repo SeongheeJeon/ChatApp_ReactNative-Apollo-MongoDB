@@ -31,7 +31,7 @@ const startApolloServer = async schema => {
 
       if (token && token !== 'undefined') {
         const {payload: user, loggedIn} = getPayload(token);
-        return {user, loggedIn};
+        return {authUser: {id: user.user_id, email: user.email}, loggedIn};
       } else {
         console.log('NO TOKEN at app.js');
         return null;

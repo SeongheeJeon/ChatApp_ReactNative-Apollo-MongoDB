@@ -13,9 +13,13 @@ const messageSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  forUserID: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
   createdAt: {type: Date, default: Date.now},
 });
 
-const Message = model('User', messageSchema);
+const Message = model('Message', messageSchema);
 
 module.exports = Message;

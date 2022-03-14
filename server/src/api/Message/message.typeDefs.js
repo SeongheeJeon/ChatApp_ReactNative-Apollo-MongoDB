@@ -1,10 +1,6 @@
 import {gql} from 'apollo-server-express';
 
 export default gql`
-  type Query {
-    messages: [Message]
-  }
-
   type Message {
     id: ID!
     content: String
@@ -13,7 +9,17 @@ export default gql`
     status: MessageStatus
     chatroomID: ID!
     userID: ID!
+    forUserID: ID!
     createdAt: String
+  }
+
+  type Query {
+    messages: [Message]
+    chatroomMessages(chatroomId: String): [Message]
+  }
+
+  type Mutation {
+    sendMessage(chatroomId: String, content: String): Message
   }
 
   enum MessageStatus {

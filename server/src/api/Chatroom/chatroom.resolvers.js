@@ -3,14 +3,18 @@ import User from '../../models/UserModel';
 
 export default {
   Query: {
+    async chatroom(_, {id}) {
+      const chatroom = await Chatroom.findById(id);
+      return chatroom;
+    },
     async chatrooms() {
       const chatrooms = await Chatroom.find();
       return chatrooms;
     },
-    async myChatrooms(_, __, {user}) {
-      const authUser = await User.findById(user.user_id).exec();
+    async myChatrooms(_, __, {authUser}) {
+      const authUserDB = await User.findById(authUser.id).exec();
       const chatrooms = await Promise.all(
-        authUser.chatrooms.map(async chatroomId => {
+        authUserDB.chatrooms.map(async chatroomId => {
           const chatroom = await Chatroom.findById(chatroomId).exec();
           return chatroom;
         }),

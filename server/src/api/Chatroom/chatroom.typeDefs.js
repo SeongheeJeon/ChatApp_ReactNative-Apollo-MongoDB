@@ -14,6 +14,7 @@ export default gql`
   }
 
   type Query {
+    chatroom(id: String): Chatroom
     chatrooms: [Chatroom]
     myChatrooms: [Chatroom]
     chatroomUsers(chatroomId: String): [User]

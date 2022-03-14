@@ -73,8 +73,13 @@ const RootNav = () => {
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}
-        options={() => ({
-          headerTitle: () => <ChatRoomHeader />,
+        options={({route}) => ({
+          headerTitle: () => (
+            <ChatRoomHeader
+              chatroomId={route.params.chatroomId}
+              authUser={authUser}
+            />
+          ),
         })}
       />
       <Stack.Screen name="GroupInfoScreen" component={GroupInfoScreen} />

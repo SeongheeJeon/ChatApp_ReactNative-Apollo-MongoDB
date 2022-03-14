@@ -42,6 +42,8 @@ const SignInScreen: React.FC<RootStackScreenProps<'UsersScreen'>> = ({
       return;
     }
 
+    asyncStorage.removeItem('token');
+
     await signInMutation({
       variables: {
         loginInput: {

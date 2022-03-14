@@ -12,7 +12,11 @@ export type RootStackParamList = {
   SignUp: undefined;
   SignIn: undefined;
   Home: undefined;
-  ChatRoom: undefined;
+  ChatRoom: {
+    authUser: AuthUser;
+    chatroomId: string;
+    userId: string | undefined;
+  };
   Modal: undefined;
   NotFound: undefined;
   UsersScreen: {authUser: AuthUser};
@@ -50,4 +54,14 @@ export interface Chatroom {
   updatedAt: String;
 }
 
-export interface Message {}
+export interface Message {
+  id: string;
+  content: string;
+  audio: string;
+  image: string;
+  status: {type: String; enum: ['SENT', 'DELIVERED', 'READ']};
+  chatroomID: string;
+  userID: string;
+  forUserID: string;
+  createdAt: Date;
+}

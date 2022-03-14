@@ -16,7 +16,7 @@ export default {
 
     async getAuthUser(parent, args, context) {
       if (context.loggedIn) {
-        const authUser = await User.findById(context.user.user_id).exec();
+        const authUser = await User.findById(context.authUser.id).exec();
         if (!authUser) {
           throw new ApolloError("Can't find User with userID.");
         }

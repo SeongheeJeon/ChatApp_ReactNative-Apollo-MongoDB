@@ -37,7 +37,11 @@ const ChatRoomItem: React.FC<Props> = ({authUser, chatroom}) => {
   }, [data, loading, error]);
 
   const onPress = async () => {
-    navigation.navigate('ChatRoom');
+    navigation.navigate('ChatRoom', {
+      authUser: authUser,
+      chatroomId: chatroom.id,
+      userId: otherUser?.id,
+    });
   };
 
   return (

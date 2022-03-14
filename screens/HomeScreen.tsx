@@ -27,7 +27,15 @@ const HomeScreen: React.FC<Props> = ({authUser}) => {
   const route = useRoute();
   const [chatrooms, setChatrooms] = useState();
 
-  const {data, loading, error} = useQuery(MYCHATROOMS_QUERY);
+  useQuery(MYCHATROOMS_QUERY, {
+    onCompleted: data => {
+      console.log('HomeScreen myChatrooms query complete ');
+      setChatrooms(data.myChatrooms);
+    },
+    onError: error => {
+      console.log(`HomeScreen query error! ${error}`);
+    },
+  });
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,15 +43,6 @@ const HomeScreen: React.FC<Props> = ({authUser}) => {
       headerTitle: () => <HomeHeader authUser={authUser || route.params} />,
     });
   }, []);
-
-  useEffect(() => {
-    if (loading) console.log('Submitting ... ');
-    if (error) console.log(`HomeScreen query error! ${error}`);
-    if (data) {
-      console.log('HomeScreen myChatrooms query complete ');
-      setChatrooms(data.myChatrooms);
-    }
-  }, [data, loading, error]);
 
   return (
     <View style={styles.page}>
