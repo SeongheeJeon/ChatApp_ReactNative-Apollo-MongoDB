@@ -16,7 +16,7 @@ const getPayload = token => {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     return {loggedIn: true, payload};
   } catch (err) {
-    console.log('paylod ERROR :  ', err);
+    console.log('paylod ERROR :', err.message);
     return {loggedIn: false};
   }
 };
@@ -31,7 +31,8 @@ const startApolloServer = async schema => {
 
       if (token && token !== 'undefined') {
         const {payload: user, loggedIn} = getPayload(token);
-        return {authUser: {id: user.user_id, email: user.email}, loggedIn};
+        if (loggedIn)
+          return {authUser: {id: user.user_id, email: user.email}, loggedIn};
       } else {
         console.log('NO TOKEN at app.js');
         return null;
