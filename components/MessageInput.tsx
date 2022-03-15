@@ -12,6 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EmojiSelector from 'react-native-emoji-selector';
 import {gql, useMutation} from '@apollo/client';
+import {Chatroom} from '../types';
 
 const SENDMESSAGE_MUTATION = gql`
   mutation sendMessage($chatroomId: String, $content: String) {
@@ -21,21 +22,22 @@ const SENDMESSAGE_MUTATION = gql`
   }
 `;
 
-const MessageInput = ({chatroom}) => {
+type Props = {
+  chatroom: Chatroom;
+};
+
+const MessageInput: React.FC<Props> = ({chatroom}) => {
   const [message, setMessage] = useState('');
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
-  const [sendMessageMutation, {data, loading, error}] = useMutation(
-    SENDMESSAGE_MUTATION,
-    {
-      onCompleted: data => {
-        console.log('sendMessageMutation completed');
-      },
-      onError: error => {
-        console.log('sendMessageMutation error: ', error);
-      },
+  const [sendMessageMutation] = useMutation(SENDMESSAGE_MUTATION, {
+    onCompleted: data => {
+      console.log('sendMessageMutation completed');
     },
-  );
+    onError: error => {
+      console.log('sendMessageMutation error: ', error);
+    },
+  });
 
   const sendMessage = async () => {
     sendMessageMutation({

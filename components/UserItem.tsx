@@ -22,23 +22,19 @@ type Props = {
 };
 
 const UserItem: React.FC<Props> = ({authUser, user}) => {
-  const [createChatroomMutation, {data, loading, error}] = useMutation(
-    CREATE_CHATROOM_MUTATION,
-  );
+  const [createChatroomMutation] = useMutation(CREATE_CHATROOM_MUTATION, {
+    onCompleted: data => {
+      console.log('UserItem createChatroomMutation completed');
+    },
+    onError: error => {
+      console.log('UserItem createChatroomMutation ERROR: ', error.message);
+    },
+  });
 
   const onUserPress = () => {
     createChatroomMutation({
       variables: {usersId: [authUser?.id, user.id]},
-      onCompleted: data => {
-        console.log('UserItem createChatroomMutation completed');
-      },
-      onError: data => {
-        console.log(data.message);
-      },
     });
-
-    if (loading) console.log('Submitting ... ');
-    if (error) console.log(`Submission error! ${error}`);
   };
 
   return (

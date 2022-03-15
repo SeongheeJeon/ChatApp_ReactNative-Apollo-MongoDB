@@ -5,7 +5,12 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Chatroom, Message as MessageModel} from '../types';
+import {
+  AuthUser,
+  Chatroom,
+  Message as MessageModel,
+  RootStackScreenProps,
+} from '../types';
 import Message from '../components/Message';
 import MessageInput from '../components/MessageInput';
 import {gql, useQuery} from '@apollo/client';
@@ -28,10 +33,14 @@ const CHATROOM_MESSAGES_QUERY = gql`
   }
 `;
 
-const ChatRoomScreen = ({route}) => {
+const ChatRoomScreen: React.FC<RootStackScreenProps<'ChatRoom'>> = ({
+  route,
+}) => {
   const [chatroom, setChatroom] = useState<Chatroom | null>(null);
-  const [messages, setMessages] = useState<MessageModel[]>([]);
-  const [authUser, setAuthUser] = useState(route.params.authUser);
+  const [messages, setMessages] = useState<[MessageModel] | undefined>();
+  const [authUser, setAuthUser] = useState<AuthUser | undefined>(
+    route.params.authUser,
+  );
 
   useQuery(CHATROOM_QUERY, {
     variables: {id: route.params.chatroomId},
@@ -50,7 +59,7 @@ const ChatRoomScreen = ({route}) => {
       console.log('ChatRoomScreen messages query complete');
       setMessages(
         data.chatroomMessages.filter(
-          message => message.forUserID === authUser.id,
+          (message: {forUserID: string}) => message.forUserID === authUser?.id,
         ),
       );
     },
@@ -77,7 +86,7 @@ const ChatRoomScreen = ({route}) => {
   return (
     <SafeAreaView style={styles.page}>
       <FlatList
-        data={messages.reverse()}
+        data={messages?.reverse()}
         renderItem={({item}) => <Message message={item} authUser={authUser} />}
         inverted
       />

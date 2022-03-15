@@ -20,23 +20,29 @@ const UsersScreen: React.FC<RootStackScreenProps<'UsersScreen'>> = ({
 }) => {
   const [otherUsers, setOtherUsers] = useState([]);
   const [authUser, setAuthUser] = useState<AuthUser | undefined>();
-  const {data, loading, error} = useQuery(GET_USERS_QUERY);
+  const {refetch} = useQuery(GET_USERS_QUERY, {
+    onCompleted: data => {
+      if (authUser) {
+        console.log('UsersScreen getUsersQuery complete');
+        const fetchedUsers = data.users.filter(
+          (user: AuthUser) => user.id !== authUser.id,
+        );
+        setOtherUsers(fetchedUsers);
+      }
+    },
+    onError: error => {
+      console.log(`UsersScreen query ERROR! ${error}`);
+    },
+    skip: !authUser,
+  });
 
   useEffect(() => {
     setAuthUser(route.params.authUser);
   }, [route]);
 
   useEffect(() => {
-    if (loading) console.log('Submitting ... ');
-    if (error) console.log(`UsersScreen query ERROR! ${error}`);
-    if (data && authUser) {
-      console.log('UsersScreen getUsersQuery complete');
-      const fetchedUsers = data.users.filter(
-        (user: AuthUser) => user.id !== authUser.id,
-      );
-      setOtherUsers(fetchedUsers);
-    }
-  }, [loading, error, data, authUser]);
+    authUser && refetch();
+  }, [authUser]);
 
   return (
     <SafeAreaView style={styles.page}>

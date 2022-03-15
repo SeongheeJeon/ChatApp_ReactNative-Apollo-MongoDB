@@ -4,7 +4,12 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ChatRoomItem from '../components/ChatRoomItem';
 import HomeHeader from '../components/HomeHeader';
-import {AuthUser} from '../types';
+import {
+  AuthUser,
+  Chatroom,
+  RootStackRouteProps,
+  RootStackSNavigationProps,
+} from '../types';
 import {gql, useQuery} from '@apollo/client';
 
 const MYCHATROOMS_QUERY = gql`
@@ -23,9 +28,9 @@ type Props = {
 };
 
 const HomeScreen: React.FC<Props> = ({authUser}) => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const [chatrooms, setChatrooms] = useState();
+  const navigation = useNavigation<RootStackSNavigationProps<'Home'>>();
+  const route = useRoute<RootStackRouteProps<'Home'>>();
+  const [chatrooms, setChatrooms] = useState<[Chatroom] | undefined>();
 
   useQuery(MYCHATROOMS_QUERY, {
     onCompleted: data => {
@@ -40,7 +45,9 @@ const HomeScreen: React.FC<Props> = ({authUser}) => {
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      headerTitle: () => <HomeHeader authUser={authUser || route.params} />,
+      headerTitle: () => (
+        <HomeHeader authUser={authUser || route.params?.authUser} />
+      ),
     });
   }, []);
 
@@ -49,7 +56,10 @@ const HomeScreen: React.FC<Props> = ({authUser}) => {
       <FlatList
         data={chatrooms}
         renderItem={({item}) => (
-          <ChatRoomItem authUser={authUser || route.params} chatroom={item} />
+          <ChatRoomItem
+            authUser={authUser || route.params?.authUser}
+            chatroom={item}
+          />
         )}></FlatList>
     </View>
   );

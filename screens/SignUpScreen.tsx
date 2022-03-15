@@ -9,6 +9,7 @@ import {
 import React, {useState} from 'react';
 import {gql, useMutation} from '@apollo/client';
 import {useNavigation} from '@react-navigation/core';
+import {RootStackScreenProps} from '../types';
 
 const SIGNUP_MUTATION = gql`
   mutation registerUser($registerInput: RegisterInput) {
@@ -18,7 +19,7 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-const SignUpScreen = () => {
+const SignUpScreen: React.FC<RootStackScreenProps<'SignUp'>> = () => {
   const [username, setUsername] = useState<String | undefined>();
   const [email, setEmail] = useState<String | undefined>();
   const [password, setPassword] = useState<String | undefined>();
@@ -26,7 +27,19 @@ const SignUpScreen = () => {
 
   const navigation = useNavigation();
 
-  const [signUpMutation, {data, loading, error}] = useMutation(SIGNUP_MUTATION);
+  const [signUpMutation] = useMutation(SIGNUP_MUTATION, {
+    onCompleted: data => {
+      Alert.alert('회원가입 완료. 로그인화면으로 이동.');
+
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'SignIn'}],
+      });
+    },
+    onError: error => {
+      Alert.alert(error.message);
+    },
+  });
 
   const onPressSignUp = async () => {
     if (!email || !username || !password || !secondPassword) {
@@ -47,20 +60,7 @@ const SignUpScreen = () => {
           password,
         },
       },
-      onCompleted: data => {
-        Alert.alert('회원가입 완료. 로그인화면으로 이동.');
-
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'SignIn'}],
-        });
-      },
-      onError: data => {
-        Alert.alert(data.message);
-      },
     });
-    if (loading) console.log('Submitting ... ');
-    if (error) console.log(`Submission error! ${error}`);
   };
 
   const goToSignIn = () => {

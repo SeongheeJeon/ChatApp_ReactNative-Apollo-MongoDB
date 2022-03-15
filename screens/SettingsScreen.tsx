@@ -2,8 +2,11 @@ import {View, Text, Pressable, StyleSheet} from 'react-native';
 import React from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackScreenProps} from '../types';
 
-const SettingsScreen = ({navigation}) => {
+const SettingsScreen: React.FC<RootStackScreenProps<'Settings'>> = ({
+  navigation,
+}) => {
   const signOut = async () => {
     AsyncStorage.removeItem('token');
 

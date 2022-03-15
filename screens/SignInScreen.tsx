@@ -29,7 +29,20 @@ const SignInScreen: React.FC<RootStackScreenProps<'UsersScreen'>> = ({
 }) => {
   const [email, setEmail] = useState<String | undefined>();
   const [password, setPassword] = useState<String | undefined>();
-  const [signInMutation, {data, loading, error}] = useMutation(SIGNIN_MUTATION);
+  const [signInMutation] = useMutation(SIGNIN_MUTATION, {
+    onCompleted: async data => {
+      asyncStorage.setItem('token', data.loginUser.token);
+      console.log('SignInScreen signInMutation completed');
+
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home', params: {authUser: data.loginUser}}],
+      });
+    },
+    onError: error => {
+      Alert.alert(error.message);
+    },
+  });
 
   const onPressSignIn = async () => {
     if (!email) {
@@ -51,26 +64,13 @@ const SignInScreen: React.FC<RootStackScreenProps<'UsersScreen'>> = ({
           password,
         },
       },
-      onCompleted: async data => {
-        asyncStorage.setItem('token', data.loginUser.token);
-        console.log('SignInScreen signInMutation completed');
-
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Home', params: data.loginUser}],
-        });
-      },
-      onError: data => {
-        Alert.alert(data.message);
-      },
     });
-    if (loading) console.log('Submitting ... ');
-    if (error) console.log(`Submission error! ${error}`);
   };
 
   const onPressFindPW = () => {
     console.log('clicked Forgot Password button');
   };
+
   const goToSignUp = () => {
     navigation.navigate('SignUp');
   };

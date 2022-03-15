@@ -1,10 +1,16 @@
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
+import {AuthUser, Message as MessageModel} from '../types';
 
 const blue = '#3777f0';
 const grey = 'lightgrey';
 
-const Message = ({message, authUser}) => {
+type Props = {
+  message: MessageModel;
+  authUser: AuthUser;
+};
+
+const Message: React.FC<Props> = ({message, authUser}) => {
   const [content, setContent] = useState(message.content);
   const [isMe, setIsMe] = useState<boolean | null>(null);
 

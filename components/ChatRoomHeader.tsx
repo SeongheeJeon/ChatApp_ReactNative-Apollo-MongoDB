@@ -1,7 +1,7 @@
 import {View, Text, Pressable, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
-import {Chatroom, User} from '../types';
+import {AuthUser, Chatroom, User} from '../types';
 import {gql, useQuery} from '@apollo/client';
 
 const CHATROOM_QUERY = gql`
@@ -22,9 +22,14 @@ const CHATROOMUSERS_QUERY = gql`
   }
 `;
 
-const ChatRoomHeader = ({chatroomId, authUser}) => {
+type Props = {
+  chatroomId: String;
+  authUser: AuthUser;
+};
+
+const ChatRoomHeader: React.FC<Props> = ({chatroomId, authUser}) => {
   const [user, setUser] = useState<User | null>(null);
-  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [allUsers, setAllUsers] = useState<User[] | undefined>([]);
   const [chatroom, setChatroom] = useState<Chatroom | undefined>(undefined);
 
   useQuery(CHATROOM_QUERY, {

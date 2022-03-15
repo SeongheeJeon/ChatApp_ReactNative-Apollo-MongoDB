@@ -1,4 +1,6 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
 
 declare global {
   namespace ReactNavigation {
@@ -11,7 +13,7 @@ export type RootStackParamList = {
   Welcome: undefined;
   SignUp: undefined;
   SignIn: undefined;
-  Home: undefined;
+  Home: {authUser: AuthUser | undefined};
   ChatRoom: {
     authUser: AuthUser;
     chatroomId: string;
@@ -26,6 +28,13 @@ export type RootStackParamList = {
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
+
+export type RootStackSNavigationProps<
+  ScreenName extends keyof RootStackParamList,
+> = NativeStackNavigationProp<RootStackParamList, ScreenName>;
+
+export type RootStackRouteProps<RouteName extends keyof RootStackParamList> =
+  RouteProp<RootStackParamList, RouteName>;
 
 export interface AuthUser {
   id: string;
